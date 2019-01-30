@@ -1,0 +1,23 @@
+{
+  "name": "phbacon",
+  "version": "1.0.0",
+  "description": "PHBacon is a collectively maintained fund for makers maintained by makers. This repository will hold all files pertaining the application (front-end, testing, smart contracts, and more). PHBacon will be a cryptocurrency fund (particularly an ETH fund) that allows makers to donate and withdraw with the goal of supporting the creation of amazing projects, products, and services.",
+  "main": "run.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vvdhout/PHBacon.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vvdhout/PHBacon/issues"
+  },
+  "homepage": "https://github.com/vvdhout/PHBacon#readme",
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "express": "^4.16.4"
+  }
+}
