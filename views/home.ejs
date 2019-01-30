@@ -1,0 +1,291 @@
+<DOCTYPE! html>
+<html>
+<head>
+
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+
+  <title>sweetApp - The sweetest and stupidest fruit app on the web</title>
+  <meta name="description" content="Create your fruits! Wow! Name them! Blawh! Sell them! Kaplaw! All the most amazing super features of the superdest awesomest sweetest app on the planet.">
+
+  <!-- <link rel="stylesheet" type="text/css" src="../css/style.css"> -->
+
+  // Provide jQuery framework
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<style>
+
+body {
+  color: #222;
+  font-family: Calibri, Arial;
+  font-size: 0;
+  margin: 0;
+  background-color: #F9F9F9;
+}
+
+.nav {
+  padding: 20px 40px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  border-bottom: 0.5px solid lightgrey;
+}
+
+.nav div {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.nav .logo {
+  width: 15%;
+  font-size: 1.8rem;
+  letter-spacing: 5px;
+  font-weight: 600;
+}
+
+.nav .search {
+  width: 50%;
+}
+
+.nav .search #search {
+  width: 80%;
+  margin-right: 1%;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  letter-spacing: 0.8px;
+}
+
+.nav .search #submit {
+  padding: 10px;
+  background-color: #008BF8;
+  border: 2px solid #008BF8;
+  color: #fff;
+  font-weight: 400;
+  letter-spacing: 0.8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#submit:hover {
+  cursor: pointer;
+  cursor: hand;
+  opacity: 0.8;
+}
+
+.nav .buttons {
+  width: 35%;
+  text-align: right;
+}
+
+.nav .buttons ul {
+  list-style: none;
+}
+
+.nav .buttons ul li {
+  display: inline-block;
+  padding: 0 5%;
+  color: #333;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  font-size: 1rem;
+}
+
+.nav .buttons ul a:hover li {
+  color: #29CE9A
+}
+
+#signup {
+  padding: 10px;
+  background-color: #008BF8;
+  border: 2px solid #008BF8;
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#signup:hover {
+  cursor: pointer;
+  cursor: hand;
+  opacity: 0.8;
+}
+
+/* Home */
+.home {
+  font-family: Arial;
+  text-align: center;
+}
+
+.centerblock {
+  width: 40%;
+  margin: 80px auto;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3.3rem;
+}
+
+.centerblock p {
+  width: 90%;
+  margin: auto;
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 30px;
+}
+
+.register {
+  font-size: 1.2rem;
+  margin-top: 50px;
+  display: inline-block;
+  padding: 10px 20px;
+  border-bottom: 100% solid #008BF8;
+  color: #fff;
+  font-weight: 300;
+  letter-spacing: 0.8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  position: relative;
+  transition: 0.4s;
+}
+
+.filler {
+  background-color: #008BF8;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -999;
+  left: 0;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.register:hover {
+  color: #008BF8;
+  transition: 0.4s;
+}
+
+.register:hover .filler {
+  height: 3px;
+  bottom: 0;
+  transition: 0.4s;
+}
+
+.disclaimer {
+  border: 0.5px solid red;
+  background-color: #fff;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  line-height: 25px;
+  margin-top: 70px;
+}
+
+</style>
+
+
+<body>
+
+<div class="container">
+  <div class="nav">
+    <a style="color: #222;" href="/"><div class="logo">
+      sweetApp
+    </div></a>
+    <div class="search">
+      <form>
+        <input type="text" name="search" id="search" placeholder="0x356jd9...">
+        <input type="submit" name="submit" value="Find" id="submit">
+      </form>
+    </div>
+    <div class="buttons">
+      <ul>
+        <a href="#"><li>Nav1</li></a>
+        <a href="#"><li>Nav2</li></a>
+        <a href="#"><li><u>Nav3</u></li></a>
+        <a href="#"><li id="signup">Nav4</li></a>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="home">
+    
+    <div class="centerblock">
+      <h1>The sweetest fruit dApp on the planet</h1>
+      <p>Create fruits (or a potato), name them and sell them. Possibilities of this app are limitless. Besides that it can literally only do those thing mentioned before.</p>
+      <a href="/register/"><div class="register">Let's create fruit!<div class="filler"></div></div></a>
+       <div class="disclaimer">
+        It is very important that you <a href="#">read this</a> before using this decentralized application. Using this product means you have agreed to these terms.
+      </div>
+    </div>
+    
+  </div>
+
+</div>
+
+</body>
+
+
+// Provide Web3 framework
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+<script>
+
+// Connect to Ethereum Network/Blockchain
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+  console.log('We already have a provider.');
+} else {
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545")); 
+  console.log('We have set a new provider on Ganache chain at localhost:8454');
+}
+
+// Set the default account
+web3.eth.defaultAccount = web3.eth.accounts[0];
+console.log('Default account: ' + web3.eth.defaultAccount);
+
+// Provide the ABI to interact with the smart contract
+const {ContractName}Contract = web3.eth.contract({ABI HERE});
+
+// Connect to the smart contract by providing its ethereum address
+const {ContractName} = {ContractName}Contract.at('{CONTRACT ADDRESS}');
+
+
+/* ============================================================================================================================
+=========== Starting actual functionality =====================================================================================
+============================================================================================================================ */
+
+// Ability to register an item
+{ContractName}.method1(_arg1, _arg2, function(error, result) {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Success!');
+  }
+})
+
+// Watching for register event
+{ContractName}.event1().watch(function(error, result) {
+  if(!error) {
+    // Code when there is NO error.
+  } else {
+    // Code when there is an error.
+  }
+})
+
+</script>
+
+</html>
