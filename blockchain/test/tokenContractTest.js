@@ -1,16 +1,15 @@
-const tokenContract = artifacts.require("tokenContract");
+const PHBaconContract = artifacts.require("PHBaconContract");
 
-contract("tokenContract test", async accounts => {
+contract("PHBaconContract test", async accounts => {
 
-  it("should do this", async () => {
+  it("should be able to show our fund balance", async () => {
     // Get deployed contract
-    let instance = await tokenContract.deployed();
+    let instance = await PHBaconContract.deployed();
     // Perform a function of the contract
-    await instance.function1(arg1, arg2, {from: accounts[0]});
-    // Store the result of another function of the contract
-    let result = await instance.function2(arg1, arg2);
+    let result = await instance.getFundBalance({from: accounts[0]});
     // Assert if result is equal to something, and if not send a message
-    assert.equal(result, "equal this", "it did not do this");
+    assert.isNumber(result, "getFundBalance does not return a number");
+    assert.equal(result, 0, "getFundBalance does not equal 0")
   })
 
 });
