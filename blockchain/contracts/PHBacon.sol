@@ -5,7 +5,8 @@ contract PHBacon {
     /* This contract should enable to following options:
     - Get contract balance
     - Deposit value into the fund
-    - Withdraw value from the fund. Size of value is rate limited (always lower than 0.5ETH per week for an address and dependent on their reputation)
+    - Withdraw value from the fund. Size of value is rate limited (can only withdraw half of contributionBalance,
+      when verified, with a max of 0.5ETH per week.)
     - We can link a PH account to our address (verification needed).
     - Withdrawls and deposits emit an event.
     - Withdrawls and deposit can have a message associated with the transaction.
@@ -14,8 +15,10 @@ contract PHBacon {
     /* The goal is to keep the contract and all blockchain-based operations incredibly simple and straightforward
     as such that it makes potential bugs and loopholes less common. */
     
-    // WARNING: This version is using a push system for transfers. Can be converted to a pull system where we
-    // maintain an extractable balance for each address and enable withdraw function that solely transfers.
+    // ===== WARNING: This version is using a push system for transfers. Can be converted to a pull system where we
+    // ===== maintain an extractable balance for each address and enable withdraw function that solely transfers.
+    
+    // ============= VARIABLES =============
     
     // Setting owner of the contract
     address private owner;
@@ -33,9 +36,19 @@ contract PHBacon {
     // Mapping address to a Maker
     mapping (address => Maker) public addressToMaker;
     
+    
     constructor() public {
         owner = msg.sender;
     }
+    
+    
+    // ============= EVENTS =============
+    
+    event depositTx(uint indexed _value, address indexed _maker);
+    event withdrawlTx(uint indexed _value, address indexed _maker);
+    
+    
+    // ============= MODIFIERS =============
     
     // Require that the msg.sender is the owner
     modifier isOwner() {
@@ -55,6 +68,9 @@ contract PHBacon {
         _;
     }
     
+    
+    // ============= FUNCTIONS =============
+    
     // Allowing anybody to query the funds value
     function getFundBalance() public view returns (uint) {
         return address(this).balance;
@@ -62,8 +78,11 @@ contract PHBacon {
     
     // Allowing anybody to deposit funds, even non-verified makers
     function deposit() public payable {
+        // Access Maker and increase contributionBalance
         Maker storage depM = addressToMaker[msg.sender];
         depM.contributionBalance += msg.value;
+        // Emit deposit event
+        emit depositTx(msg.value, msg.sender);
     }
     
     // Allowing the wirthdrawl of funds by verified makers, capped at 0.5ETH per week, and 
@@ -72,9 +91,13 @@ contract PHBacon {
         // Set max withdrawl
         uint max = addressToMaker[msg.sender].contributionBalance / 2;
         require(_value <= max, "Sorry, you can only extract half of your contributionBalance in Wei.");
+        // Access Maker and decrease contributionBalance
         Maker storage withM = addressToMaker[msg.sender];
         withM.contributionBalance -= _value;
+        // Transfer funds
         msg.sender.transfer(_value);
+        // Emit withdrawl event
+        emit withdrawlTx(_value, msg.sender);
     }
     
     // Set verified address
