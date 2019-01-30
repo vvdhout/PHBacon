@@ -11,11 +11,17 @@ contract PHBacon {
     - Withdrawls and deposit can have a message associated with the transaction.
     */
     
+    /* The goal is to keep the contract and all blockchain-based operations incredibly simple and straightforward
+    as such that it makes potential bugs and loopholes less common. */
+    
     // WARNING: This version is using a push system for transfers. Can be converted to a pull system where we
     // maintain an extractable balance for each address and enable withdraw function that solely transfers.
     
     // Setting owner of the contract
     address private owner;
+    
+    // Enabling pausability -> We first want to get sufficient funds in before we enable withdrawls.
+    bool private withdrawPaused = true;
     
     // Setting Maker struct template that holds maker data
     struct Maker {
@@ -33,7 +39,13 @@ contract PHBacon {
     
     // Require that the msg.sender is the owner
     modifier isOwner() {
-        require(msg.sender == owner);
+        require(msg.sender == owner, "Only the owner can call this function.");
+        _;
+    }
+    
+    // Require that withdrawls are not paused
+    modifier notPaused() {
+        require(withdrawPaused == false, "Withdrawls are currently paused.");
         _;
     }
     
@@ -56,7 +68,7 @@ contract PHBacon {
     
     // Allowing the wirthdrawl of funds by verified makers, capped at 0.5ETH per week, and 
     // value dependent on contributionBalance with a max debt of 1 ETH per maker (assymptote)
-    function withdraw(uint _value) public verified() {
+    function withdraw(uint _value) public notPaused() verified() {
         // Set max withdrawl
         uint max = addressToMaker[msg.sender].contributionBalance / 2;
         require(_value <= max, "Sorry, you can only extract half of your contributionBalance in Wei.");
@@ -69,6 +81,11 @@ contract PHBacon {
     function verify(address _makerAddress) public isOwner() {
         addressToMaker[_makerAddress].verified = true;
         addressToMaker[_makerAddress].contributionBalance += 1000000000000000000;
+    }
+    
+    // Pause or re-open withdrawls 
+    function pause(bool _bool) public isOwner() {
+        withdrawPaused = _bool;
     }
     
 }
