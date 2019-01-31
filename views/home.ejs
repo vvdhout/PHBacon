@@ -227,6 +227,10 @@ body {
   font-size: 2.2rem;
 }
 
+.centerblock p {
+  display: inline-block;
+}
+
 .centerblock .value span {
   font-size: 1.4rem;
 }
@@ -405,7 +409,7 @@ body {
     <div class="centerblock">
     <h1>Total fund</h1>
       <div class="barChart">
-        <div class="bar"><div class="fill"><div class="value">32.3<br><span>ETH</span>
+        <div class="bar"><div class="fill"><div class="value"><p id="fundBalance">32.3</p><br><span>ETH</span>
           </div></div></div>
       </div>
        <div class="disclaimer">
@@ -503,7 +507,7 @@ body {
 </body>
 
 
-// Provide Web3 framework
+<!-- Provide Web3 framework -->
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 
 <script>
@@ -522,33 +526,180 @@ web3.eth.defaultAccount = web3.eth.accounts[0];
 console.log('Default account: ' + web3.eth.defaultAccount);
 
 // Provide the ABI to interact with the smart contract
-const {ContractName}Contract = web3.eth.contract({ABI HERE});
+const PHBaconContract = web3.eth.contract([
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_bool",
+        "type": "bool"
+      }
+    ],
+    "name": "pause",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_value",
+        "type": "uint256"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_makerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "verify",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "addressToMaker",
+    "outputs": [
+      {
+        "name": "contributionBalance",
+        "type": "uint256"
+      },
+      {
+        "name": "PHusername",
+        "type": "string"
+      },
+      {
+        "name": "verified",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [],
+    "name": "deposit",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundBalance",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "_maker",
+        "type": "address"
+      }
+    ],
+    "name": "depositTx",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "_maker",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawlTx",
+    "type": "event"
+  }
+]);
 
 // Connect to the smart contract by providing its ethereum address
-const {ContractName} = {ContractName}Contract.at('{CONTRACT ADDRESS}');
+const PHBacon = PHBaconContract.at('0x7Fa9e5F9808a5055d4bff6013DDBe984CC751556',);
 
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
 ============================================================================================================================ */
 
-// Ability to register an item
-{ContractName}.method1(_arg1, _arg2, function(error, result) {
+// Get fundbalance at open
+PHBacon.getFundBalance(function(error, result) {
   if (error) {
     console.log(error);
   } else {
-    console.log('Success!');
+    $('#fundBalance').text(result/1000000000000000000);
   }
 })
 
-// Watching for register event
-{ContractName}.event1().watch(function(error, result) {
-  if(!error) {
-    // Code when there is NO error.
-  } else {
-    // Code when there is an error.
-  }
-})
+// Update fundBalance every 60 seconds
+setInterval(function() {
+    PHBacon.getFundBalance(function(error, result) {
+      if (error) {
+        console.log(error);
+      } else {
+        $('#fundBalance').text(result/1000000000000000000);
+      }
+    })
+}, 60 * 1000); 
+
+// Getting latest deposit/withdrawals ATEMPT!
+const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contractAddress,topics: [web3.sha3('depositTx(uint,address)')]})
+
+// // Watching for register event
+// {ContractName}.event1().watch(function(error, result) {
+//   if(!error) {
+//     // Code when there is NO error.
+//   } else {
+//     // Code when there is an error.
+//   }
+// })
 
 </script>
 
