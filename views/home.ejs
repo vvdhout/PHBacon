@@ -127,63 +127,132 @@ body {
 .home {
   font-family: Arial;
   text-align: center;
-}
-
-.centerblock {
-  width: 40%;
-  margin: 80px auto;
-  text-align: center;
-}
-
-h1 {
-  font-size: 3.3rem;
-}
-
-.centerblock p {
-  width: 90%;
-  margin: auto;
-  font-size: 1.1rem;
-  color: #666;
-  line-height: 30px;
-}
-
-.register {
-  font-size: 1.2rem;
-  margin-top: 50px;
-  display: inline-block;
-  padding: 10px 20px;
-  border-bottom: 100% solid #008BF8;
-  color: #fff;
-  font-weight: 300;
-  letter-spacing: 0.8px;
-  border-radius: 2px;
+  padding: 70px;
   -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-  position: relative;
-  transition: 0.4s;
 }
 
-.filler {
-  background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+.left {
+  width: 35%;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.centerblock {
+  width: 30%;
+  margin: 20px auto;
+  text-align: center;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  padding: 30px;
+}
+
+.right {
+  width: 35%;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding-left: 25px;
+}
+
+.transaction {
+  margin-bottom: 20px;
+}
+
+.transaction .arrow {
+  width:8%;
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 15px;
+      -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.transaction .arrow img {
   width: 100%;
-  height: 100%;
-  position: absolute;
-  z-index: -999;
-  left: 0;
-  bottom: 0;
-  transition: 0.4s;
 }
 
-.register:hover {
-  color: #4441ff;
-  transition: 0.4s;
+.transaction .box {
+  box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  padding: 10px;
+  background-color: #fff;
+  width: 92%;
+  display: inline-block;
+  transition: 0.9s;
 }
 
-.register:hover .filler {
-  height: 3px;
-  bottom: 0;
-  transition: 0.4s;
+.transaction .box:hover {
+  box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2);
+  transition: 0.3s;
+  cursor: hand;
+  cursor: pointer;
+}
+
+.transaction .image {
+  display: inline-block;
+  vertical-align: middle;
+  width: 12%;
+}
+
+.transaction .image img {
+  width: 100%;
+  border-radius: 50%;
+}
+
+.transaction .makerInfo {
+  text-align: left;
+  display: inline-block;
+  vertical-align: middle;
+  width: 68%;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  padding: 0 10px;
+}
+
+.transaction .makerInfo h5 {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #555;
+  display: inline-block;
+  margin: 0;
+}
+
+.transaction .makerInfo span {
+  font-size: 0.8rem;
+  font-weight: 300;
+  color: #888;
+  display: inline-block;
+  margin-left: 15px;
+}
+
+.transaction .makerInfo p {
+  font-size: 0.7rem;
+  font-weight: 300;
+  color: #888;
+  margin: 0;
+  margin-top: 2px;
+}
+
+.transaction .value {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20%;
+  font-size: 1.4rem;
+}
+
+.transaction .value span {
+  font-size: 0.9rem;
 }
 
 .disclaimer {
@@ -221,7 +290,10 @@ h1 {
   </div>
   
   <div class="home">
-    
+    <div class="left">
+
+    </div>
+
     <div class="centerblock">
       <h1>The sweetest fruit dApp on the planet</h1>
       <p>Create fruits (or a potato), name them and sell them. Possibilities of this app are limitless. Besides that it can literally only do those thing mentioned before.</p>
@@ -229,6 +301,89 @@ h1 {
        <div class="disclaimer">
         It is very important that you <a href="#">read this</a> before using this decentralized application. Using this product means you have agreed to these terms.
       </div>
+    </div>
+
+    <div class="right">
+      <div class="transaction">
+      <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
+        <div class="box">
+          <div class="image">
+            <img src="https://images.unsplash.com/photo-1464820453369-31d2c0b651af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" />
+          </div>
+          <div class="makerInfo">
+            <h5>Valentijn v/den Hout</h5><span> | </span><span>0x356jd9...</span>
+            <p><i>Supporting makers building awesome things with PHBacon funds.</i></p>
+          </div>
+          <div class="value">
+            0.03<br><span>ETH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transaction">
+      <div class="arrow"><img src="https://courseroot.com/img/sort-down.png" /></div>
+        <div class="box">
+          <div class="image">
+            <img src="http://assets.menshealth.co.uk/main/thumbs/28811/ryan-reynolds-full-body-front-2006-quJqf9-mdn__square.jpg" />
+          </div>
+          <div class="makerInfo">
+            <h5>Ryan Reynolds</h5><span> | </span><span>0x356jd9...</span>
+            <p><i>Deadpool needs cash. I'd appreciate it if you wouldn't ask questions.</i></p>
+          </div>
+          <div class="value">
+            0.13<br><span>ETH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transaction">
+      <div class="arrow"><img src="https://courseroot.com/img/sort-down.png" /></div>
+        <div class="box">
+          <div class="image">
+            <img src="https://pbs.twimg.com/profile_images/977496875887558661/L86xyLF4_400x400.jpg" />
+          </div>
+          <div class="makerInfo">
+            <h5>Vitalik Nakamoto</h5><span> | </span><span>0x356jd9...</span>
+            <p><i>Building Bitethereum, a weird un-necessary Bitcoin and Ethereum morphed blockchain.</i></p>
+          </div>
+          <div class="value">
+            0.19<br><span>ETH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transaction">
+      <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
+        <div class="box">
+          <div class="image">
+            <img src="https://frostsnow.com//uploads/biography/2017/01/24/bear-grylls.jpg" />
+          </div>
+          <div class="makerInfo">
+            <h5>Bear Grylls</h5><span> | </span><span>0x356jd9...</span>
+            <p><i>I don't need this cash for now. Will be living inside a cammel for a short time.</i></p>
+          </div>
+          <div class="value">
+            0.21<br><span>ETH</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="transaction">
+      <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
+        <div class="box">
+          <div class="image">
+            <img src="https://pbs.twimg.com/profile_images/1866433586/AskKPika_400x400.jpg" />
+          </div>
+          <div class="makerInfo">
+            <h5>Ash Ketchum 'Kanto'</h5><span> | </span><span>0x356jd9...</span>
+            <p><i>Supporting my fellow Pokemon masters in their quest of cathing 'em all.</i></p>
+          </div>
+          <div class="value">
+            0.09<br><span>ETH</span>
+          </div>
+        </div>
+      </div>
+      
     </div>
     
   </div>
