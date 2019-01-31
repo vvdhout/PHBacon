@@ -186,13 +186,49 @@ body {
 
 .centerblock {
   width: 30%;
-  margin: 20px auto;
   text-align: center;
   display: inline-block;
   -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-  padding: 30px;
+  padding: 0 30px;
+}
+
+.centerblock h1 {
+  font-size: 2rem;
+      margin: 0;
+    margin-bottom: 35px;
+    font-weight: 300;
+}
+
+.centerblock .barChart .bar {
+  height: 280px;
+  width: 60%;
+  box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
+  margin: auto;
+  position: relative;
+}
+
+.centerblock .barChart .bar .fill {
+  width: 100.5%;
+  height: 76%;
+  background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+
+.centerblock .value {
+  color: #fff;
+  position: relative;
+  top: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 2.2rem;
+}
+
+.centerblock .value span {
+  font-size: 1.4rem;
 }
 
 /* ========== Right segment: Transaction logs ========== 
@@ -205,6 +241,7 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     padding-left: 50px;
+  vertical-align: top;
 }
 
 .transaction {
@@ -310,10 +347,10 @@ body {
 .disclaimer {
   border: 0.5px solid red;
   background-color: #fff;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   padding: 10px 20px;
-  line-height: 25px;
-  margin-top: 70px;
+  line-height: 20px;
+  margin-top: 50px;
 }
 
 </style>
@@ -366,9 +403,11 @@ body {
     </div>
 
     <div class="centerblock">
-      <h1>The sweetest fruit dApp on the planet</h1>
-      <p>Create fruits (or a potato), name them and sell them. Possibilities of this app are limitless. Besides that it can literally only do those thing mentioned before.</p>
-      <a href="/register/"><div class="register">Let's create fruit!<div class="filler"></div></div></a>
+    <h1>Total fund</h1>
+      <div class="barChart">
+        <div class="bar"><div class="fill"><div class="value">32.3<br><span>ETH</span>
+          </div></div></div>
+      </div>
        <div class="disclaimer">
         It is very important that you <a href="#">read this</a> before using this decentralized application. Using this product means you have agreed to these terms.
       </div>
