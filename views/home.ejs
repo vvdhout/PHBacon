@@ -357,12 +357,11 @@ body {
   margin-top: 50px;
 }
 
-</style>
+/* ===========================================
+============== OVERLAY and MODAL =============
+============================================*/
 
-
-<body>
-
-<div class="overlay" style="
+.overlay {
     position: absolute;
     width: 100%;
     padding: 150px;
@@ -370,51 +369,65 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     background: rgba(0,0,0,0.6);
-    /* opacity: 0.8; */
     z-index: 999;
-"><div class="modal" style="
+    display: none;
+}
+
+.overlay .modal {
     position: relative;
     width: 50%;
     border: 0.5px solid lightgrey;
     margin: auto;
     background-color: #fff;
     border-radius: 3px;
-">
-    <div class="nav" style="padding: 0 !important;">
-        <div class="TxOption" style="
-    width: 50%;
-    font-size: 1rem;
-    text-align: center;
-    padding: 20px;
-    background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
-    color: #fff;
-    box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2);
-">Deposit
-        </div>
-        <div class="TxOption" style="
+}
+
+.overlay .modal .activeTx {
+      background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+    color: #fff !important;
+    box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2) !important;
+}
+
+.overlay .modal .TxOption {
     width: 50%;
     font-size: 1rem;
     text-align: center;
     padding: 20px;
     box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
-">Withdraw
-        </div>
-    </div>
-    <div class="depositWindow" style="
-    padding: 50px 70px;
-"><form style="
-    -webkit-box-sizing: border-box;
+    transition: 0.2s;
+}
+
+.overlay .modal .txOption:hover {
+cursor: default;
+}
+
+.overlay .modal .TxOption:not(.activeTx):hover {
+box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2) !important;
+cursor: pointer !important;
+cursor: hand !important;
+transition: 0.2s;
+}
+
+
+.window {
+padding: 50px 70px;
+}
+
+.window form {
+      -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-">
-        <p style="
-    font-size: 1.2rem;
+}
+
+.window form p {
+      font-size: 1.2rem;
     margin: 0;
     margin-bottom: 10px;
     color: #555;
-">Your address</p>
-        <input type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled="" style="
-    padding: 10px 15px;
+}
+
+.window form .addressInput {
+      padding: 10px 15px;
     width: 100%;
     font-size: 0.8rem;
     letter-spacing: 0.9;
@@ -422,14 +435,10 @@ body {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-"><p style="
-    font-size: 1.2rem;
-    margin: 0;
-    margin-bottom: 10px;
-    color: #555;
-">Amount in ETH</p>
-        <input type="number" style="
-    padding: 20px 40px;
+}
+
+.window form .valueInput {
+      padding: 20px 40px;
     font-size: 1.8rem;
     letter-spacing: 0.9;
     font-weight: 300;
@@ -438,8 +447,10 @@ body {
     box-sizing: border-box;
     width: 65%;
     color: #555;
-    " value="0.28" step="0.01"><p style="
-    font-size: 1.3rem;
+}
+
+.window form .toUSD {
+      font-size: 1.3rem;
     color: #999;
     vertical-align: middle;
     width: 35%;
@@ -450,10 +461,10 @@ body {
     display: inline-block;
     padding-bottom: 30px;
     margin: 0;
-">30.6543 USD</p>
-    
-    </form><div class="goButton" style="
-    padding: 10px 20px !important;
+}
+
+.window .goButton {
+      padding: 10px 20px !important;
     background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
     color: #fff !important;
     font-weight: 600;
@@ -465,7 +476,35 @@ body {
     font-size: 1rem;
     text-align: center;
     margin-top: 20px;
-">
+    transition: 0.3s;
+}
+
+.window .goButton:hover {
+  opacity: 0.8;
+  transition: 0.3s;
+  cursor: pointer;
+  cursor: hand;
+}
+
+
+</style>
+
+
+<body>
+
+<div class="overlay"><div class="modal">
+    <div class="nav" style="padding: 0 !important;">
+        <div class="TxOption activeTx">Deposit
+        </div>
+        <div class="TxOption">Withdraw
+        </div>
+    </div>
+    <div class="depositWindow window"><form>
+        <p>Your address</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>Amount in ETH</p>
+        <input class="valueInput" type="number" value="0.28" step="0.01"><p class="toUSD">30.6543 USD</p>
+    
+    </form><div class="goButton" id="depositSubmit">
         Let's go! I want to deposit these funds.
     </div>
     
@@ -482,8 +521,8 @@ body {
     </div></a>
     <div class="buttons">
       <ul>
-        <a href="#"><li id="depositButton" class="txButton">Deposit</li></a>
-        <a href="#"><li id="withdrawButton" class="txButton">Withdraw</li></a>
+        <li id="depositButton" class="txButton">Deposit</li>
+        <li id="withdrawButton" class="txButton">Withdraw</li>
         <a href="#"><li>Awesomeness</li></a>
       </ul>
     </div>
@@ -805,16 +844,16 @@ setInterval(function() {
 // // Getting latest deposit/withdrawals ATEMPT!
 // const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contractAddress,topics: [web3.sha3('depositTx(uint,address)')]})
 
-PHBacon.getPastEvents('depositTx', {
-      fromBlock: 0,
-      toBlock: 'latest'
-    }, function(error, result) {
-      if (!error) {
-        console.log(result);
-      } else {
-        console.log(error);
-      }
-    });
+// PHBacon.getPastEvents('depositTx', {
+//       fromBlock: 0,
+//       toBlock: 'latest'
+//     }, function(error, result) {
+//       if (!error) {
+//         console.log(result);
+//       } else {
+//         console.log(error);
+//       }
+//     });
 
 // // Watching for register event
 // {ContractName}.event1().watch(function(error, result) {
@@ -829,11 +868,19 @@ PHBacon.getPastEvents('depositTx', {
 // ============= Tx Functionality ================
 
 $('#depositButton').click(function() {
-  // Open deposit window
+  $('.overlay').css('display', 'block');
 })
 
 $('#withdrawButton').click(function() {
   // Open withdraw window
+})
+
+// Hiding modal when clicking outside of it
+$(document).mouseup(function(e) {
+  let container = $(".modal");
+  if(!container.is(e.target) && container.has(e.target).length === 0 && container.is(":visible")) {
+    $('.overlay').hide();
+  }
 })
 
 </script>
