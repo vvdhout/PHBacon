@@ -369,8 +369,8 @@ body {
     </div></a>
     <div class="buttons">
       <ul>
-        <a href="#"><li class="txButton">Deposit</li></a>
-        <a href="#"><li class="txButton">Withdraw</li></a>
+        <a href="#"><li id="depositButton" class="txButton">Deposit</li></a>
+        <a href="#"><li id="withdrawButton" class="txButton">Withdraw</li></a>
         <a href="#"><li>Awesomeness</li></a>
       </ul>
     </div>
@@ -712,6 +712,16 @@ PHBacon.getPastEvents('depositTx', {
 //   }
 // })
 
+
+// ============= Tx Functionality ================
+
+$('#depositButton').click(function() {
+  // Open deposit window
+})
+
+$('#withdrawButton').click(function() {
+  // Open withdraw window
+})
 
 </script>
 
