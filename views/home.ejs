@@ -662,7 +662,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x7Fa9e5F9808a5055d4bff6013DDBe984CC751556',);
+const PHBacon = PHBaconContract.at('0x2b4589F3FA0318D269d9aF7974Cd8CFCAD96D969',);
 
 
 /* ============================================================================================================================
@@ -689,8 +689,19 @@ setInterval(function() {
     })
 }, 60 * 1000); 
 
-// Getting latest deposit/withdrawals ATEMPT!
-const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contractAddress,topics: [web3.sha3('depositTx(uint,address)')]})
+// // Getting latest deposit/withdrawals ATEMPT!
+// const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contractAddress,topics: [web3.sha3('depositTx(uint,address)')]})
+
+PHBacon.getPastEvents('depositTx', {
+      fromBlock: 0,
+      toBlock: 'latest'
+    }, function(error, result) {
+      if (!error) {
+        console.log(result);
+      } else {
+        console.log(error);
+      }
+    });
 
 // // Watching for register event
 // {ContractName}.event1().watch(function(error, result) {
@@ -700,6 +711,7 @@ const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contract
 //     // Code when there is an error.
 //   }
 // })
+
 
 </script>
 
