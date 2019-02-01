@@ -865,7 +865,7 @@ setInterval(function() {
 // })
 
 
-// ============= Tx Functionality ================
+// ============= Overlay Functionality ================
 
 $('#depositButton').click(function() {
   $('.overlay').css('display', 'block');
@@ -881,6 +881,22 @@ $(document).mouseup(function(e) {
   if(!container.is(e.target) && container.has(e.target).length === 0 && container.is(":visible")) {
     $('.overlay').hide();
   }
+})
+
+
+// ===================== Tx Functionality form modal ======================
+
+$('#depositSubmit').click(function() {
+  // Set the default account
+  let defaultAcc = web3.eth.accounts[0];
+  let depValue = $('#depositValue').val();
+  PHBacon.deposit({from: defaultAcc, value: depValue}, function(error, result) {
+    if (error) {
+      console.log(error);
+    } else {
+      alert(`Succesfully deposited ${depValue} to the PHBacon fund! You are awesome for supporting your fellow makers! Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
+    }
+  })
 })
 
 </script>
