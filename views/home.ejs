@@ -160,6 +160,11 @@ body {
         color: #555;
 }
 
+.left .dataBox .bit p {
+  margin: 0;
+    display: inline-block;
+}
+
 .left .dataBox .bit span {
   font-size: 0.7rem;
 }
@@ -547,7 +552,7 @@ padding: 50px 70px;
         </div>
         <div class="row">
           <div class="bit">
-          23<br><span style="color: #29EF7E;">donations</span>
+          <p id="depositCount">23</p><br><span style="color: #29EF7E;">donations</span>
           </div>
           <div class="bit">
           11<br><span style="color: #F0397A;">withdrawals</span>
@@ -659,7 +664,7 @@ padding: 50px 70px;
 </body>
 
 
-<!-- Provide Web3 framework -->
+<!-- Provide Web3 framework '-->
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 
 <script>
@@ -848,48 +853,44 @@ const PHBacon = PHBaconContract.at('0xb422654C0e0431974424063738712C801Ea5c336',
 =========== Starting actual functionality =====================================================================================
 ============================================================================================================================ */
 
-// Get fundbalance at open
-PHBacon.getFundBalance(function(error, result) {
+const collectDepositTx = PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
+  if (error)
+    return error;
+  else
+    $('#depositCount').text(eventResult.length);
+    return eventResult.length;
+});
+
+const getFunds = PHBacon.getFundBalance(function(error, result) {
   if (error) {
-    console.log(error);
+    return error;
   } else {
     $('#fundBalance').text(result/1000000000000000000);
   }
 })
 
+// Set fund balance
+getFunds();
+
+// Get latest depositTx and update content
+collectDepositTx();
+
+
 // Update fundBalance every 60 seconds
 setInterval(function() {
-    PHBacon.getFundBalance(function(error, result) {
-      if (error) {
-        console.log(error);
-      } else {
-        $('#fundBalance').text(result/1000000000000000000);
-      }
-    })
+    getFunds()
 }, 30 * 1000); 
 
-// // Getting latest deposit/withdrawals ATEMPT!
-// const filter = web3.eth.filter({fromBlock: 0,toBlock: 'latest',address: contractAddress,topics: [web3.sha3('depositTx(uint,address)')]})
-
-// PHBacon.getPastEvents('depositTx', {
-//       fromBlock: 0,
-//       toBlock: 'latest'
-//     }, function(error, result) {
-//       if (!error) {
-//         console.log(result);
-//       } else {
-//         console.log(error);
-//       }
-//     });
-
-// // Watching for register event
-// {ContractName}.event1().watch(function(error, result) {
-//   if(!error) {
-//     // Code when there is NO error.
-//   } else {
-//     // Code when there is an error.
-//   }
-// })
+// Watching for depositTx event and updating page content
+PHBacon.depositTx().watch(function(error, result) {
+  if(!error) {
+    // WE NEED TO MODULARIZE THIS!
+    getFunds();
+    collectDepositTx;
+  } else {
+    console.log(error);
+  }
+})
 
 
 // ============= Overlay Functionality ================
