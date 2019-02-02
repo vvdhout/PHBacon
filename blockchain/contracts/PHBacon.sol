@@ -75,6 +75,12 @@ contract PHBacon {
     function getFundBalance() public view returns (uint) {
         return address(this).balance;
     } 
+
+    // Get maker information using an address
+    function getMaker(address _address) public view returns(string memory, uint memory, bool memory) {
+        Maker memory getM = addressToMaker[_address];
+        return(getM.PHusername,getM.contributionBalance,getM.verified);
+    }
     
     // Allowing anybody to deposit funds, even non-verified makers
     function deposit() public payable {
