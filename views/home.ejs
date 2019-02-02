@@ -725,6 +725,33 @@ const PHBaconContract = web3.eth.contract([
     "constant": true,
     "inputs": [
       {
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "getMaker",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
         "name": "",
         "type": "address"
       }
@@ -814,7 +841,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x560EFbCde675275881569A35d01E4DAFE6c16b73',);
+const PHBacon = PHBaconContract.at('0xb422654C0e0431974424063738712C801Ea5c336',);
 
 
 /* ============================================================================================================================
@@ -895,6 +922,7 @@ $('#depositSubmit').click(function() {
     if (error) {
       console.log(error);
     } else {
+      $('.overlay').hide();
       alert(`Succesfully deposited ${depValue} to the PHBacon fund! You are awesome for supporting your fellow makers! Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
     }
   })

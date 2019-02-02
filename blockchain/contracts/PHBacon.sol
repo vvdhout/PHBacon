@@ -77,7 +77,7 @@ contract PHBacon {
     } 
 
     // Get maker information using an address
-    function getMaker(address _address) public view returns(string memory, uint memory, bool memory) {
+    function getMaker(address _address) public view returns(string memory, uint, bool) {
         Maker memory getM = addressToMaker[_address];
         return(getM.PHusername,getM.contributionBalance,getM.verified);
     }
