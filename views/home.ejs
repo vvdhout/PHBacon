@@ -349,6 +349,11 @@ body {
   font-size: 1.4rem;
 }
 
+.transaction .value p {
+  margin: 0;
+    display: inline-block;
+}
+
 .transaction .value span {
   font-size: 0.9rem;
 }
@@ -575,7 +580,7 @@ padding: 50px 70px;
     </div>
 
     <div class="right">
-      <div class="transaction">
+      <div class="transaction" id="Tx0">
       <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
         <div class="box">
           <div class="image">
@@ -586,12 +591,12 @@ padding: 50px 70px;
             <p><i>Supporting makers building awesome things with PHBacon funds.</i></p>
           </div>
           <div class="value">
-            0.03<br><span>ETH</span>
+            <p>0.12</p><br><span>ETH</span>
           </div>
         </div>
       </div>
 
-      <div class="transaction">
+      <div class="transaction" id="Tx1">
       <div class="arrow"><img src="https://courseroot.com/img/sort-down.png" /></div>
         <div class="box">
           <div class="image">
@@ -602,12 +607,12 @@ padding: 50px 70px;
             <p><i>Deadpool needs cash. I'd appreciate it if you wouldn't ask questions.</i></p>
           </div>
           <div class="value">
-            0.13<br><span>ETH</span>
+            <p>0.09</p><br><span>ETH</span>
           </div>
         </div>
       </div>
 
-      <div class="transaction">
+      <div class="transaction" id="Tx2">
       <div class="arrow"><img src="https://courseroot.com/img/sort-down.png" /></div>
         <div class="box">
           <div class="image">
@@ -618,12 +623,12 @@ padding: 50px 70px;
             <p><i>Building Bitethereum, a weird Bitcoin and Ethereum morphed blockchain.</i></p>
           </div>
           <div class="value">
-            0.19<br><span>ETH</span>
+            <p>0.03</p><br><span>ETH</span>
           </div>
         </div>
       </div>
 
-      <div class="transaction">
+      <div class="transaction" id="Tx3">
       <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
         <div class="box">
           <div class="image">
@@ -634,12 +639,12 @@ padding: 50px 70px;
             <p><i>I don't need this cash for now. Will be living inside a cammel for a short time.</i></p>
           </div>
           <div class="value">
-            0.21<br><span>ETH</span>
+            <p>0.22</p><br><span>ETH</span>
           </div>
         </div>
       </div>
 
-      <div class="transaction">
+      <div class="transaction" id="Tx4">
       <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png" /></div>
         <div class="box">
           <div class="image">
@@ -650,7 +655,7 @@ padding: 50px 70px;
             <p><i>Supporting my fellow Pokemon masters in their quest of cathing 'em all.</i></p>
           </div>
           <div class="value">
-            0.09<br><span>ETH</span>
+            <p>0.13</p><br><span>ETH</span>
           </div>
         </div>
       </div>
@@ -846,28 +851,34 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xb422654C0e0431974424063738712C801Ea5c336',);
+const PHBacon = PHBaconContract.at('0xb422654C0e0431974424063738712C801Ea5c336');
 
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
 ============================================================================================================================ */
 
-const collectDepositTx = PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
-  if (error)
-    return error;
-  else
-    $('#depositCount').text(eventResult.length);
-    return eventResult.length;
-});
-
-const getFunds = PHBacon.getFundBalance(function(error, result) {
+const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
   if (error) {
     return error;
   } else {
     $('#fundBalance').text(result/1000000000000000000);
   }
-})
+})};
+
+
+const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
+  if (error) {
+    return error;
+  } else {
+      $('#depositCount').text(eventResult.length);
+      for(let i=0; i < 5; i++) {
+        $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(eventResult[eventResult.length-(1+i)].args._maker.substring(0,7) + '...');
+        $(`#tx${i} .value p`).text(Math.round((eventResult[eventResult.length-(1+i)].args._value/1000000000000000000)*1000)/1000);
+      }
+      console.log(eventResult);
+  }
+})};
 
 // Set fund balance
 getFunds();
@@ -886,7 +897,7 @@ PHBacon.depositTx().watch(function(error, result) {
   if(!error) {
     // WE NEED TO MODULARIZE THIS!
     getFunds();
-    collectDepositTx;
+    collectDepositTx();
   } else {
     console.log(error);
   }
