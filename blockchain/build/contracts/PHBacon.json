@@ -5857,10 +5857,16 @@
       "links": {},
       "address": "0xb422654C0e0431974424063738712C801Ea5c336",
       "transactionHash": "0x9d9580f6d268622caf41c6b900af7bb8492d0ba4d75f09a032e9d26ab5226d2d"
+    },
+    "1549125221780": {
+      "events": {},
+      "links": {},
+      "address": "0x5f3a2D53BC93792966228218eC1A5e27a196b6ab",
+      "transactionHash": "0xaa6c74c0b93d6ef5b9d99563272dbf3f435d63e67f28c349da6cdcf8f76ab02a"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-02-02T11:49:14.096Z",
+  "updatedAt": "2019-02-02T16:37:00.107Z",
   "devdoc": {
     "methods": {}
   },

@@ -851,7 +851,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xb422654C0e0431974424063738712C801Ea5c336');
+const PHBacon = PHBaconContract.at('0x5f3a2D53BC93792966228218eC1A5e27a196b6ab');
 
 
 /* ============================================================================================================================
@@ -873,8 +873,14 @@ const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 
   } else {
       $('#depositCount').text(eventResult.length);
       for(let i=0; i < 5; i++) {
-        $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(eventResult[eventResult.length-(1+i)].args._maker.substring(0,7) + '...');
-        $(`#tx${i} .value p`).text(Math.round((eventResult[eventResult.length-(1+i)].args._value/1000000000000000000)*1000)/1000);
+        let address = eventResult[eventResult.length-(1+i)].args._maker.substring(0,7) + '...';
+        let value = Math.round((eventResult[eventResult.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+        $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
+        $(`#tx${i} .value p`).text(value);
+        // ==================================================================== This is throwing a big number error for some reason! 
+        // let makerReturn = PHBacon.getMaker(address);
+        // console.log(makerReturn);
+        // // $(`#tx${i} .value p`).text();
       }
       console.log(eventResult);
   }
