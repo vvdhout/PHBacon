@@ -851,7 +851,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x5f3a2D53BC93792966228218eC1A5e27a196b6ab');
+const PHBacon = PHBaconContract.at('0x35Ca85B7fe7c86Cf10C830798cF4E59e82dAfe83');
 
 
 /* ============================================================================================================================
@@ -862,7 +862,7 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
   if (error) {
     return error;
   } else {
-    $('#fundBalance').text(result/1000000000000000000);
+    $('#fundBalance').text(Math.round((result/1000000000000000000)*10000)/10000);
   }
 })};
 
