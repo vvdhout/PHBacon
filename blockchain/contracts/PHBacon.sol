@@ -43,8 +43,7 @@ contract PHBacon {
     
     
     // ============= EVENTS =============
-    event depositTx(uint indexed _value, address indexed _maker);
-    event withdrawlTx(uint indexed _value, address indexed _maker);
+    event Transaction(bytes32 indexed _type, uint indexed _value, address indexed _maker);
     
     
     // ============= MODIFIERS =============
@@ -87,7 +86,7 @@ contract PHBacon {
         Maker storage depM = addressToMaker[msg.sender];
         depM.contributionBalance += msg.value;
         // Emit deposit event
-        emit depositTx(msg.value, msg.sender);
+        emit Transaction("deposit", msg.value, msg.sender);
     }
     
     // Allowing the wirthdrawl of funds by verified makers, capped at 0.5ETH per week, and 
@@ -102,7 +101,7 @@ contract PHBacon {
         // Transfer funds
         msg.sender.transfer(_value);
         // Emit withdrawl event
-        emit withdrawlTx(_value, msg.sender);
+        emit Transaction("withdrawl", _value, msg.sender);
     }
     
     // Set verified address

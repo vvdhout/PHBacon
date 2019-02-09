@@ -819,21 +819,9 @@ const PHBaconContract = web3.eth.contract([
     "inputs": [
       {
         "indexed": true,
-        "name": "_value",
-        "type": "uint256"
+        "name": "_type",
+        "type": "bytes32"
       },
-      {
-        "indexed": true,
-        "name": "_maker",
-        "type": "address"
-      }
-    ],
-    "name": "depositTx",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
       {
         "indexed": true,
         "name": "_value",
@@ -845,13 +833,13 @@ const PHBaconContract = web3.eth.contract([
         "type": "address"
       }
     ],
-    "name": "withdrawlTx",
+    "name": "Transaction",
     "type": "event"
   }
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xc71B01312B51A9dada09B346C94A4Ca0Acfe06b3');
+const PHBacon = PHBaconContract.at('0xf425633f54233EC3e8AbEdcC6F9fB8c55D0aD6Ab');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -868,19 +856,19 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 })};
 
 
-// Get all events for the Tx dashboard
-const getEvents = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
-  if (error) { 
-    return error;
-  }
-    else {
-      console.log(result.length);
-    }
-});
-}
+// // Get all events for the Tx dashboard
+// const getEvents = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
+//   if (error) { 
+//     return error;
+//   }
+//     else {
+//       console.log(result.length);
+//     }
+// });
+// }
 
 // Get deposit data and import
-const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
+const collectDepositTx = () => { PHBacon.Transaction({_type: '0x6465706f73697400000000000000000000000000000000000000000000000000'}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
   if (error) {
     return error;
   } else {
@@ -907,7 +895,7 @@ const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 
 // Set fund balance
 getFunds();
 
-getEvents();
+// getEvents();
 
 // Get latest depositTx and update content
 collectDepositTx();
@@ -919,7 +907,7 @@ setInterval(function() {
 }, 30 * 1000); 
 
 // Watching for depositTx event and updating page content
-PHBacon.depositTx().watch(function(error, result) {
+PHBacon.Transaction().watch(function(error, result) {
   if(!error) {
     // WE NEED TO MODULARIZE THIS!
     getFunds();
