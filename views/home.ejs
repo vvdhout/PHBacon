@@ -851,8 +851,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xd080532664fd00F7649460d9C8C0ca71BA56e88e');
-
+const PHBacon = PHBaconContract.at('0xc71B01312B51A9dada09B346C94A4Ca0Acfe06b3');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -870,7 +869,7 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 
 
 // Get all events for the Tx dashboard
-const getEvents = () => { PHBacon.Tx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
+const getEvents = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
   if (error) { 
     return error;
   }
