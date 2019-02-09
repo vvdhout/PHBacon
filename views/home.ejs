@@ -560,7 +560,7 @@ padding: 50px 70px;
           <p id="depositCount">23</p><br><span style="color: #29EF7E;">donations</span>
           </div>
           <div class="bit">
-          11<br><span style="color: #F0397A;">withdrawals</span>
+          <p id="withdrawlCount">11</p><br><span style="color: #F0397A;">withdrawals</span>
           </div>
         </div>
       </div>
@@ -839,7 +839,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xf425633f54233EC3e8AbEdcC6F9fB8c55D0aD6Ab');
+const PHBacon = PHBaconContract.at('0xd510000Ea751954134923E2072eF221a3a1De38c');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -868,27 +868,46 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 // }
 
 // Get deposit data and import
-const collectDepositTx = () => { PHBacon.Transaction({_type: '0x6465706f73697400000000000000000000000000000000000000000000000000'}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
+const collectTx = () => { PHBacon.Transaction({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
   if (error) {
     return error;
   } else {
-      $('#depositCount').text(eventResult.length);
-      let valueIncrease = 0;
-      for(let i=0; i < 5; i++) {
-        let address = eventResult[eventResult.length-(1+i)].args._maker.substring(0,7) + '...';
-        let value = Math.round((eventResult[eventResult.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
-        $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
-        $(`#tx${i} .value p`).text(value);
-        // ==================================================================== This is throwing a big number error for some reason! 
-        // let makerReturn = PHBacon.getMaker(address);
-        // console.log(makerReturn);
-        // // $(`#tx${i} .value p`).text();
+    console.log(result); 
+      // Set a value variable that will track the value change of the fund
+      let valueCount = 0;
+      let depositCounter = 0;
+      let withdrawlCounter = 0;
+      for(let i=0; i < result.length; i++) {
+        // If _type is deposit (bytes32)
+        if (result[result.length-(1+i)].args._type = '0x6465706f73697400000000000000000000000000000000000000000000000000') {
+          // Increment depositCounter
+          depositCounter += 1;
+          // Increase value
+          valueCount += Number(result[result.length-(1+i)].args._value);
+          // Set transaction box 
+          let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+          let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+          $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
+          $(`#tx${i} .value p`).text(value);
+        } // If _type is withdrawl (btes32)
+        else if (result[result.length-(1+i)].args._type = '0x77697468647261776c0000000000000000000000000000000000000000000000') {
+          // Increment depositCounter
+          withdrawlCounter += 1;
+          console.log(withdrawlCounter);
+          // Decrease value
+          valueCount -= Number(result[result.length-(1+i)].args._value);
+          // Set transaction box 
+          let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+          let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+          $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
+          $(`#tx${i} .value p`).text(value);
+        } else {
+          return "When collecting transaction events, we found events that did not match a deposit nor a withdrawl _type."
+        }
       }
-      for(let i=0; i < eventResult.length; i++) {
-        valueIncrease += eventResult[eventResult.length-(1+i)].args._value/1000000000000000000;
-      }
-      $('#valueUp').text(Math.round((valueIncrease*107)*100)/100);
-      console.log(eventResult);
+      $('#depositCount').text(depositCounter);
+      $('#withdrawlCount').text(withdrawlCounter);
+      $('#valueUp').text(Math.round(((valueCount/1000000000000000000)*107)*100)/100);
   }
 })};
 
@@ -898,7 +917,7 @@ getFunds();
 // getEvents();
 
 // Get latest depositTx and update content
-collectDepositTx();
+collectTx();
 
 
 // Update fundBalance every 60 seconds
@@ -911,7 +930,7 @@ PHBacon.Transaction().watch(function(error, result) {
   if(!error) {
     // WE NEED TO MODULARIZE THIS!
     getFunds();
-    collectDepositTx();
+    collectTx();
   } else {
     console.log(error);
   }
