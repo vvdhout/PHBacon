@@ -552,7 +552,7 @@ padding: 50px 70px;
             <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>6%
           </div>
           <div class="bit">
-            <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>$360
+            <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>$<p id="valueUp">360</p>
           </div>
         </div>
         <div class="row">
@@ -851,13 +851,15 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x35Ca85B7fe7c86Cf10C830798cF4E59e82dAfe83');
+const PHBacon = PHBaconContract.at('0xd080532664fd00F7649460d9C8C0ca71BA56e88e');
 
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
 ============================================================================================================================ */
 
+
+// Get fund balance and convert to ETH with 3 decimals
 const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
   if (error) {
     return error;
@@ -867,11 +869,24 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 })};
 
 
+// Get all events for the Tx dashboard
+const getEvents = () => { PHBacon.Tx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
+  if (error) { 
+    return error;
+  }
+    else {
+      console.log(result.length);
+    }
+});
+}
+
+// Get deposit data and import
 const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 'latest' }).get((error, eventResult) => {
   if (error) {
     return error;
   } else {
       $('#depositCount').text(eventResult.length);
+      let valueIncrease = 0;
       for(let i=0; i < 5; i++) {
         let address = eventResult[eventResult.length-(1+i)].args._maker.substring(0,7) + '...';
         let value = Math.round((eventResult[eventResult.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
@@ -882,12 +897,18 @@ const collectDepositTx = () => { PHBacon.depositTx({}, { fromBlock: 0, toBlock: 
         // console.log(makerReturn);
         // // $(`#tx${i} .value p`).text();
       }
+      for(let i=0; i < eventResult.length; i++) {
+        valueIncrease += eventResult[eventResult.length-(1+i)].args._value/1000000000000000000;
+      }
+      $('#valueUp').text(Math.round((valueIncrease*107)*100)/100);
       console.log(eventResult);
   }
 })};
 
 // Set fund balance
 getFunds();
+
+getEvents();
 
 // Get latest depositTx and update content
 collectDepositTx();
