@@ -150,10 +150,10 @@ body {
 }
 
 .left .dataBox .bit {
-  font-size: 2.9rem;
+  font-size: 2.5rem;
   display: inline-block;
   width: 50%;
-  padding: 20px;
+  padding: 15px;
   -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -551,7 +551,7 @@ padding: 50px 70px;
           <div class="bit">
             <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>6%
           </div>
-          <div class="bit">
+          <div class="bit" style="font-size: 1.6rem;">
             <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>$<p id="valueUp">360</p>
           </div>
         </div>
@@ -839,7 +839,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xd510000Ea751954134923E2072eF221a3a1De38c');
+const PHBacon = PHBaconContract.at('0xB4b16556cE2965E5DdeA22DeA095B726d67f07b0');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -872,14 +872,13 @@ const collectTx = () => { PHBacon.Transaction({}, { fromBlock: 0, toBlock: 'late
   if (error) {
     return error;
   } else {
-    console.log(result); 
       // Set a value variable that will track the value change of the fund
       let valueCount = 0;
       let depositCounter = 0;
       let withdrawlCounter = 0;
       for(let i=0; i < result.length; i++) {
         // If _type is deposit (bytes32)
-        if (result[result.length-(1+i)].args._type = '0x6465706f73697400000000000000000000000000000000000000000000000000') {
+        if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
           // Increment depositCounter
           depositCounter += 1;
           // Increase value
@@ -889,8 +888,9 @@ const collectTx = () => { PHBacon.Transaction({}, { fromBlock: 0, toBlock: 'late
           let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
           $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
           $(`#tx${i} .value p`).text(value);
+          $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/caret-arrow-up.png");
         } // If _type is withdrawl (btes32)
-        else if (result[result.length-(1+i)].args._type = '0x77697468647261776c0000000000000000000000000000000000000000000000') {
+        else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
           // Increment depositCounter
           withdrawlCounter += 1;
           console.log(withdrawlCounter);
@@ -901,6 +901,7 @@ const collectTx = () => { PHBacon.Transaction({}, { fromBlock: 0, toBlock: 'late
           let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
           $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
           $(`#tx${i} .value p`).text(value);
+          $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/sort-down.png");
         } else {
           return "When collecting transaction events, we found events that did not match a deposit nor a withdrawl _type."
         }
