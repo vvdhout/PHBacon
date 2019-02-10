@@ -942,6 +942,8 @@ PHBacon.Transaction().watch(function(error, result) {
 
 $('#depositButton').click(function() {
   $('.overlay').css('display', 'block');
+  let defaultAcc = web3.eth.accounts[0];
+  $('.depositWindow .addressInput').val(defaultAcc);
 })
 
 $('#withdrawButton').click(function() {
