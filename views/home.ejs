@@ -504,9 +504,9 @@ padding: 50px 70px;
 
 <div class="overlay"><div class="modal">
     <div class="nav" style="padding: 0 !important;">
-        <div class="TxOption activeTx">Deposit
+        <div class="TxOption depNav">Deposit
         </div>
-        <div class="TxOption">Withdraw
+        <div class="TxOption withNav">Withdraw
         </div>
     </div>
     <div class="depositWindow window"><form>
@@ -517,9 +517,15 @@ padding: 50px 70px;
     </form><div class="goButton" id="depositSubmit">
         Let's go! I want to deposit these funds.
     </div>
+    </div>
+    <div class="withdrawWindow window"><form>
+        <p>Your address</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>Amount in ETH</p>
+        <input class="valueInput" id="withdrawValue" type="number" value="0.05" step="0.01"><p class="toUSD">30.6543 USD</p>
     
-    
-    
+    </form><div class="goButton" id="withdrawSubmit">
+        Let's go! I want to withdraw these funds.
+    </div>
     </div>
 </div>
 </div>
@@ -669,7 +675,7 @@ padding: 50px 70px;
 </body>
 
 
-<!-- Provide Web3 framework '-->
+<!-- Provide Web3 framework -->
 <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
 
 <script>
@@ -868,49 +874,65 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 // }
 
 // Get deposit data and import
-const collectTx = () => { PHBacon.Transaction({}, { fromBlock: 0, toBlock: 'latest' }).get((error, result) => {
-  if (error) {
-    return error;
-  } else {
-      // Set a value variable that will track the value change of the fund
-      let valueCount = 0;
-      let depositCounter = 0;
-      let withdrawlCounter = 0;
-      for(let i=0; i < result.length; i++) {
-        // If _type is deposit (bytes32)
-        if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
-          // Increment depositCounter
-          depositCounter += 1;
-          // Increase value
-          valueCount += Number(result[result.length-(1+i)].args._value);
-          // Set transaction box 
-          let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
-          let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
-          $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
-          $(`#tx${i} .value p`).text(value);
-          $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/caret-arrow-up.png");
-        } // If _type is withdrawl (btes32)
-        else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
-          // Increment depositCounter
-          withdrawlCounter += 1;
-          console.log(withdrawlCounter);
-          // Decrease value
-          valueCount -= Number(result[result.length-(1+i)].args._value);
-          // Set transaction box 
-          let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
-          let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
-          $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
-          $(`#tx${i} .value p`).text(value);
-          $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/sort-down.png");
-        } else {
-          return "When collecting transaction events, we found events that did not match a deposit nor a withdrawl _type."
-        }
+const collectTx = () => {
+  let blockNr;
+  web3.eth.getBlockNumber((err, result) => { 
+    if (err) {
+      console.log(err);
+    } else {
+      // Set current blockNr
+      blockNr = result;
+      // Set fromblock for filter
+      let fromBlock = blockNr - 6000;
+      // Make sure it's not lower than 0
+      if (fromBlock < 0) {
+        fromBlock = 0;
       }
-      $('#depositCount').text(depositCounter);
-      $('#withdrawlCount').text(withdrawlCounter);
-      $('#valueUp').text(Math.round(((valueCount/1000000000000000000)*107)*100)/100);
-  }
-})};
+      // Get Transaction events
+      PHBacon.Transaction({}, { fromBlock: fromBlock, toBlock: 'latest' }).get((error, result) => {
+      if (error) {
+        return error;
+      } else {
+          // Set a value variable that will track the value change of the fund
+          let valueCount = 0;
+          let depositCounter = 0;
+          let withdrawlCounter = 0;
+          for(let i=0; i < result.length; i++) {
+            // If _type is deposit (bytes32)
+            if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
+              // Increment depositCounter
+              depositCounter += 1;
+              // Increase value
+              valueCount += Number(result[result.length-(1+i)].args._value);
+              // Set transaction box 
+              let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+              let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+              $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
+              $(`#tx${i} .value p`).text(value);
+              $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/caret-arrow-up.png");
+            } // If _type is withdrawl (btes32)
+            else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
+              // Increment depositCounter
+              withdrawlCounter += 1;
+              // Decrease value
+              valueCount -= Number(result[result.length-(1+i)].args._value);
+              // Set transaction box 
+              let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+              let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+              $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
+              $(`#tx${i} .value p`).text(value);
+              $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/sort-down.png");
+            } else {
+              return "When collecting transaction events, we found events that did not match a deposit nor a withdrawl _type."
+            }
+          }
+          $('#depositCount').text(depositCounter);
+          $('#withdrawlCount').text(withdrawlCounter);
+          $('#valueUp').text(Math.round(((valueCount/1000000000000000000)*107)*100)/100);
+      }
+    })}
+    })
+  } 
 
 // Set fund balance
 getFunds();
@@ -941,13 +963,28 @@ PHBacon.Transaction().watch(function(error, result) {
 // ============= Overlay Functionality ================
 
 $('#depositButton').click(function() {
+  $('.withdrawWindow').css('display', 'none');
+  $('.withNav').removeClass('activeTx');
+  $('.depNav').addClass('activeTx');
   $('.overlay').css('display', 'block');
+  $('.depositWindow').css('display', 'block');
   let defaultAcc = web3.eth.accounts[0];
-  $('.depositWindow .addressInput').val(defaultAcc);
+  $('.window .addressInput').val(defaultAcc);
 })
 
 $('#withdrawButton').click(function() {
-  // Open withdraw window
+  $('.depositWindow').css('display', 'none');
+  $('.withNav').addClass('activeTx');
+  $('.depNav').removeClass('activeTx');
+  $('.overlay').css('display', 'block');
+  $('.withdrawWindow').css('display', 'block');
+  let defaultAcc = web3.eth.accounts[0];
+  $('.window .addressInput').val(defaultAcc);
+})
+
+$('.TxOption:not(.activeTx)').click( function() {
+  $('.TxOption').toggleClass('activeTx');
+  $('.window').toggle();
 })
 
 // Hiding modal when clicking outside of it
@@ -972,6 +1009,22 @@ $('#depositSubmit').click(function() {
     } else {
       $('.overlay').hide();
       alert(`Succesfully deposited ${depValue} to the PHBacon fund! You are awesome for supporting your fellow makers! Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
+    }
+  })
+})
+
+
+$('#withdrawSubmit').click(function() {
+  // Set the default account
+  let defaultAcc = web3.eth.accounts[0];
+  let withValue = $('#withdrawValue').val();
+  let valueWei = web3.toWei(withValue, "ether");
+  PHBacon.withdraw(valueWei, {from: defaultAcc}, function(error, result) {
+    if (error) {
+      console.log(error);
+    } else {
+      $('.overlay').hide();
+      alert(`Succesfully withdrew ${withValue} from the PHBacon fund! We hope you can use the funds resourcefully and that it will help you with your project. Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
     }
   })
 })
