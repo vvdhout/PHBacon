@@ -149,6 +149,10 @@ body {
     padding-right: 50px;
 }
 
+.left .dataBox {
+  position: relative;
+}
+
 .left .dataBox .bit {
   font-size: 2.5rem;
   display: inline-block;
@@ -560,6 +564,16 @@ padding: 50px 70px;
   <div class="home">
     <div class="left">
       <div class="dataBox">
+      <p style="
+          font-size: 0.6rem;
+          color: #999;
+          letter-spacing: 0.6px;
+          opacity: 0.8;
+      ">Last 24h (6000 blocks)</p><hr style="
+          border: 0.5px solid lightgrey;
+          width: 40%;
+          margin-bottom: 20px;
+      ">
         <div class="row">
           <div class="bit">
             <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div><p id="percUp">6</p>%
@@ -577,7 +591,16 @@ padding: 50px 70px;
           </div>
         </div>
       </div>
-      <div class="graph"><hr style="
+      <div class="graph">
+      <span style="
+    font-size: 0.6rem;
+    color: #999;
+    letter-spacing: 0.6px;
+    position: absolute;
+    left: 10px;
+    bottom: 51%;
+    opacity: 0.8;
+">Transactions</span><hr style="
     position: absolute;
     bottom: 50%;
     border: 0.5px solid lightgrey;
@@ -596,6 +619,166 @@ padding: 50px 70px;
       <div class="tinyBar">
       </div>
       <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div><div class="tinyBar">
       </div>
       <div class="tinyBar">
       </div>
@@ -889,7 +1072,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xc5A391f2CE41356FfB657BDe6F2437f71869D6Cb');
+const PHBacon = PHBaconContract.at('0x695ae1ECE9Fd2f1AA92F46E533835400260ceE32');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -998,9 +1181,9 @@ const collectTx = () => {
                   height = value * 50;
                 }
               if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
-                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#29EF7E","bottom": "50%", "height": height+"%", "right": i + "%"});
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#29EF7E","top": "unset", "bottom": "50%", "height": height+"%", "right": i + "%"});
               } else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
-                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#F0397A","top": "50%", "height": height+"%", "right": i + "%"});
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#F0397A","top": "50%","bottom": "unset", "height": height+"%", "right": i + "%"});
               } else {
 
               }
