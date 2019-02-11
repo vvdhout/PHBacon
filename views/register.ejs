@@ -1,0 +1,790 @@
+<DOCTYPE! html>
+<html>
+<head>
+
+  <meta name="viewport" content="width=device-width">
+  <meta charset="utf-8">
+
+  <title>A collective fund by makers for makers - PHBacon</title>
+  <meta name="description" content="PHBacon is a collectively maintained fund by makers for makers, allowing the community members to donate and withdraw funds to help support the creation of awesome things.">
+
+  <!-- <link rel="stylesheet" type="text/css" src="../css/style.css"> -->
+
+  // Provide jQuery framework
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+</head>
+
+<style>
+
+body {
+  color: #222;
+  font-family: Calibri, Arial;
+  font-size: 0;
+  margin: 0;
+  background-color: #F9F9F9;
+}
+
+.nav {
+  padding: 20px 40px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  border-bottom: 0.5px solid lightgrey;
+}
+
+.nav div {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.nav .logo {
+  width: 15%;
+  font-size: 1.8rem;
+  letter-spacing: 5px;
+  font-weight: 600;
+}
+
+.nav .search {
+  width: 45%;
+  text-align: right;
+}
+
+.nav .search #search {
+  width: 70%;
+  margin-right: 1%;
+  padding: 10px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  letter-spacing: 0.8px;
+}
+
+.nav .search #submit {
+  padding: 12px;
+  background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+  border: none;
+  color: #fff;
+  font-weight: 400;
+  letter-spacing: 0.8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+#submit:hover {
+  cursor: pointer;
+  cursor: hand;
+  opacity: 0.8;
+}
+
+.nav .buttons {
+  width: 40%;
+}
+
+.nav .buttons ul {
+  list-style: none;
+}
+
+.nav .buttons ul li {
+  display: inline-block;
+  padding: 0 5%;
+  color: #333;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  font-size: 1rem;
+  margin-left: 30px;
+}
+
+.nav .buttons ul a:hover li {
+  color: #29CE9A
+}
+
+.txButton {
+  padding: 10px 20px !important;
+  background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+  color: #fff !important;
+  font-weight: 600;
+  letter-spacing: 0.8px;
+  border-radius: 2px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.txButton:hover {
+  cursor: pointer;
+  cursor: hand;
+  opacity: 0.8;
+}
+
+/* =====================================================
+========== HOME ------- HOME -------- HOME ============= 
+===================================================== */
+
+.home {
+  font-family: Arial;
+  text-align: center;
+  padding: 70px;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+/* ========== Center segment: Vault ========== 
+===================================================== */
+
+.barBlock {
+  width: 35%;
+  margin-left: 0;
+  text-align: center;
+  display: inline-block;
+  -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  padding: 0 30px;
+}
+
+.barBlock h1 {
+  font-size: 2rem;
+      margin: 0;
+    margin-bottom: 35px;
+    font-weight: 300;
+}
+
+.barBlock .barChart .bar {
+  height: 280px;
+  width: 60%;
+  box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
+  margin: auto;
+  position: relative;
+}
+
+.barBlock .barChart .bar .fill {
+  width: 100.5%;
+  height: 76%;
+  background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+  position: absolute;
+  bottom: 0;
+  text-align: center;
+}
+
+.barBlock .value {
+  color: #fff;
+  position: relative;
+  top: 15px;
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 2.2rem;
+}
+
+.barBlock p {
+  display: inline-block;
+}
+
+.barBlock .value span {
+  font-size: 1.4rem;
+}
+
+
+/* ==========================================
+============= FORM ==========================
+============================================*/
+
+#registerButton:hover {
+  opacity: 0.8;
+  transition: 0.3s;
+  cursor: hand;
+  cursor: pointer;
+}
+
+/* ===========================================
+============== OVERLAY and MODAL =============
+============================================*/
+
+.overlay {
+    position: absolute;
+    width: 100%;
+    padding: 100px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    background: rgba(0,0,0,0.6);
+    z-index: 999;
+    display: none;
+}
+
+.overlay .modal {
+    position: relative;
+    width: 50%;
+    border: 0.5px solid lightgrey;
+    margin: auto;
+    background-color: #fff;
+    border-radius: 3px;
+}
+
+.overlay .modal .activeTx {
+      background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+    color: #fff !important;
+    box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2) !important;
+}
+
+.overlay .modal .TxOption {
+    width: 50%;
+    font-size: 1rem;
+    text-align: center;
+    padding: 20px;
+    box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
+    transition: 0.2s;
+}
+
+.overlay .modal .txOption:hover {
+cursor: default;
+}
+
+.overlay .modal .TxOption:not(.activeTx):hover {
+box-shadow: 3px 3px 15px 0 rgba(46,61,73,.2) !important;
+cursor: pointer !important;
+cursor: hand !important;
+transition: 0.2s;
+}
+
+
+.window {
+padding: 50px 70px;
+}
+
+.window form {
+      -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.window form p {
+      font-size: 1.2rem;
+    margin: 0;
+    margin-bottom: 10px;
+    color: #555;
+}
+
+.window form .addressInput {
+      padding: 10px 15px;
+    width: 100%;
+    font-size: 0.8rem;
+    letter-spacing: 0.9;
+    margin-bottom: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.window form .messageInput {
+    padding: 10px 15px;
+    width: 100%;
+    font-size: 0.8rem;
+    letter-spacing: 0.9;
+    margin-bottom: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.window form .valueInput {
+      padding: 20px 40px;
+    font-size: 1.8rem;
+    letter-spacing: 0.9;
+    font-weight: 300;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 65%;
+    color: #555;
+}
+
+.window form .toUSD {
+      font-size: 1.3rem;
+    color: #999;
+    vertical-align: middle;
+    width: 35%;
+    padding: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    padding-bottom: 30px;
+    margin: 0;
+}
+
+.window .goButton {
+      padding: 10px 20px !important;
+    background-image: linear-gradient(to bottom right, #ff66c4, #4441ff);
+    color: #fff !important;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    border-radius: 2px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    font-size: 1rem;
+    text-align: center;
+    margin-top: 20px;
+    transition: 0.3s;
+}
+
+.window .goButton:hover {
+  opacity: 0.8;
+  transition: 0.3s;
+  cursor: pointer;
+  cursor: hand;
+}
+
+
+</style>
+
+
+<body>
+
+<div class="overlay"><div class="modal">
+    <div class="nav" style="padding: 0 !important;">
+        <div class="TxOption depNav">Deposit
+        </div>
+        <div class="TxOption withNav">Withdraw
+        </div>
+    </div>
+    <div class="depositWindow window"><form>
+        <p>Your address</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>A message</p>
+        <input class="messageInput" id="messageValue" type="text" placeholder="Let us know why you are depositing some funds." required><p>Amount in ETH</p>
+        <input class="valueInput" id="depositValue" type="number" value="0.28" step="0.01"><p class="toUSD">30.6543 USD</p>
+    
+    <div class="goButton" id="depositSubmit"></form>
+        Let's go! I want to deposit these funds.
+    </div>
+    </div>
+    <div class="withdrawWindow window"><form>
+        <p>Your address</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>A message</p>
+        <input class="messageInput" id="messageValue" type="text" placeholder="Let us know why you are withdrawing these funds." required><p>Amount in ETH</p>
+        <input class="valueInput" id="withdrawValue" type="number" value="0.05" step="0.01"><p class="toUSD">30.6543 USD</p>
+    
+    <div class="goButton" id="withdrawSubmit"></form>
+        Let's go! I want to withdraw these funds.
+    </div>
+    </div>
+</div>
+</div>
+
+<div class="container">
+  <div class="nav">
+    <a style="color: #222;" href="/"><div class="logo">
+      <img src="https://courseroot.com/img/phbacon_logo_slim.png" />
+    </div></a>
+    <div class="buttons">
+      <ul>
+        <li id="depositButton" class="txButton">Deposit</li>
+        <li id="withdrawButton" class="txButton">Withdraw</li>
+        <a href="#"><li>Awesomeness</li></a>
+      </ul>
+    </div>
+    <div class="search">
+      <form>
+        <input type="text" name="search" id="search" placeholder="0x356jd9...">
+        <input type="submit" name="submit" value="Find" id="submit">
+      </form>
+    </div>
+  </div>
+  
+  <div class="home" style="
+    padding: 70px 140px;
+">
+
+  <div class="barBlock" style="
+    vertical-align: middle;
+">
+    <h1>Total fund</h1>
+      <div class="barChart">
+        <div class="bar"><div class="fill"><div class="value"><p id="fundBalance">4.69</p><br><span>ETH</span>
+          </div></div></div>
+      </div>
+       <div class="disclaimer">
+        It is very important that you <a href="#">read this</a> before using this decentralized application. Using this product means you have agreed to these terms.
+      </div>
+  </div>
+
+  <div class="registerBlock" style="
+    display: inline-block;
+    vertical-align: middle;
+    width: 65%;
+    padding: 0 50px;
+    box-sizing: border-box;
+    text-align: left;
+    "><h1 style="
+    font-size: 1.5rem;
+    font-weight: 300;
+    margin-bottom: 30px;
+">Register as a PH maker</h1>
+    <form style="
+">
+    <input class="address" value="" disabled="" style="
+    display: block;
+    width: 75%;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+">
+        <p style="
+    font-size: 1.1rem;
+    text-align: left;
+">Your Product Hunt Username</p>
+    <input class="username" placeholder="MegaPHMaker231" style="
+    display: block;
+    width: 75%;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+">
+        <p style="
+    font-size: 1.1rem;
+    text-align: left;
+">Your Maker Profile Picture</p>
+    <input class="imageurl" placeholder="https://example.com/thisismyimage.png" style="
+    display: block;
+    width: 75%;
+    padding: 10px 15px;
+    margin-bottom: 30px;
+">
+        <div class="submitButton" id="registerButton" style="
+    display: inline-block;
+    background-color: lightblue;
+    font-size: 1.4rem;
+    padding: 10px 15px;
+    color: #fff;
+    border-radius: 2px;
+">Register</div>
+    </form>
+  </div>
+    
+  </div>
+
+</div>
+
+</body>
+
+
+<!-- Provide Web3 framework -->
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js/dist/web3.min.js"></script>
+
+<script>
+
+// Connect to Ethereum Network/Blockchain
+if (typeof web3 !== 'undefined') {
+  web3 = new Web3(web3.currentProvider);
+  console.log('We already have a provider.');
+} else {
+  web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545")); 
+  console.log('We have set a new provider on Ganache chain at localhost:8454');
+}
+
+// Set the default account
+web3.eth.defaultAccount = web3.eth.accounts[0];
+console.log('Default account: ' + web3.eth.defaultAccount);
+
+// Provide the ABI to interact with the smart contract
+const PHBaconContract = web3.eth.contract([
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_bool",
+        "type": "bool"
+      }
+    ],
+    "name": "pause",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_makerAddress",
+        "type": "address"
+      }
+    ],
+    "name": "verify",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "_address",
+        "type": "address"
+      }
+    ],
+    "name": "getMaker",
+    "outputs": [
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "string"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "name": "addressToMaker",
+    "outputs": [
+      {
+        "name": "contributionBalance",
+        "type": "uint256"
+      },
+      {
+        "name": "PHusername",
+        "type": "string"
+      },
+      {
+        "name": "imgurl",
+        "type": "string"
+      },
+      {
+        "name": "verified",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getFundBalance",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_username",
+        "type": "string"
+      },
+      {
+        "name": "_imageurl",
+        "type": "string"
+      }
+    ],
+    "name": "becomeMaker",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "_type",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "name": "_maker",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "Transaction",
+    "type": "event"
+  }
+]);
+
+// Connect to the smart contract by providing its ethereum address
+const PHBacon = PHBaconContract.at('0xd1a0536AFdA125cD50Ff76d501D5764dE2F23Fc9');
+
+/* ============================================================================================================================
+=========== Starting actual functionality =====================================================================================
+============================================================================================================================ */
+
+// Get fund balance and convert to ETH with 3 decimals
+const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
+  if (error) {
+    return error;
+  } else {
+    $('#fundBalance').text(Math.round((result/1000000000000000000)*10000)/10000);
+  }
+})};
+
+// Set fund balance
+getFunds();
+
+// Watching for depositTx event and updating page content
+PHBacon.Transaction().watch(function(error, result) {
+  if(!error) {
+    // WE NEED TO MODULARIZE THIS!
+    getFunds();
+    collectTx();
+  } else {
+    console.log(error);
+  }
+})
+
+
+// ============= Overlay Functionality ================
+
+$('#depositButton').click(function() {
+  $('.withdrawWindow').css('display', 'none');
+  $('.withNav').removeClass('activeTx');
+  $('.depNav').addClass('activeTx');
+  $('.overlay').css('display', 'block');
+  $('.depositWindow').css('display', 'block');
+  let defaultAcc = web3.eth.accounts[0];
+  $('.window .addressInput').val(defaultAcc);
+})
+
+$('#withdrawButton').click(function() {
+  $('.depositWindow').css('display', 'none');
+  $('.withNav').addClass('activeTx');
+  $('.depNav').removeClass('activeTx');
+  $('.overlay').css('display', 'block');
+  $('.withdrawWindow').css('display', 'block');
+  let defaultAcc = web3.eth.accounts[0];
+  $('.window .addressInput').val(defaultAcc);
+})
+
+$('.TxOption:not(.activeTx)').click( function() {
+  $('.TxOption').toggleClass('activeTx');
+  $('.window').toggle();
+})
+
+// Hiding modal when clicking outside of it
+$(document).mouseup(function(e) {
+  let container = $(".modal");
+  if(!container.is(e.target) && container.has(e.target).length === 0 && container.is(":visible")) {
+    $('.overlay').hide();
+  }
+})
+
+
+// ===================== Tx Functionality form modal ======================
+
+$('#depositSubmit').click(function() {
+  // Set the default account
+  let defaultAcc = web3.eth.accounts[0];
+  let message = $('.depositWindow #messageValue').val();
+  let depValue = $('#depositValue').val();
+  let valueWei = web3.toWei(depValue, "ether");
+  PHBacon.deposit(message, {from: defaultAcc, value: valueWei}, function(error, result) {
+    if (error) {
+      console.log(error);
+    } else {
+      $('.overlay').hide();
+      alert(`Succesfully deposited ${depValue} to the PHBacon fund! You are awesome for supporting your fellow makers! Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
+    }
+  })
+})
+
+
+$('#withdrawSubmit').click(function() {
+  // Set the default account
+  let defaultAcc = web3.eth.accounts[0];
+  let message = $('.withdrawWindow #messageValue').val();
+  let withValue = $('#withdrawValue').val();
+  let valueWei = web3.toWei(withValue, "ether");
+  PHBacon.withdraw(valueWei, message, {from: defaultAcc}, function(error, result) {
+    if (error) {
+      console.log(error);
+    } else {
+      $('.overlay').hide();
+      alert(`Succesfully withdrew ${withValue} from the PHBacon fund! We hope you can use the funds resourcefully and that it will help you with your project. Note that, given we are using the Ethereum blockchain, it might take a few minutes for the funds to show.`);
+    }
+  })
+})
+
+</script>
+
+</html>

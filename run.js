@@ -22,3 +22,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.get('/', (req, res) => { 
 	res.render('home');
 });
+
+// Calling the register.ejs file from the views folder when on /register/
+app.get('/register/', (req, res) => { 
+	res.render('register');
+});
