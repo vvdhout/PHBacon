@@ -49,12 +49,12 @@ body {
 }
 
 .nav .search {
-  width: 45%;
+  width: 35%;
   text-align: right;
 }
 
 .nav .search #search {
-  width: 70%;
+  width: 75%;
   margin-right: 1%;
   padding: 10px;
   -webkit-box-sizing: border-box;
@@ -83,7 +83,7 @@ body {
 }
 
 .nav .buttons {
-  width: 40%;
+  width: 50%;
 }
 
 .nav .buttons ul {
@@ -92,7 +92,7 @@ body {
 
 .nav .buttons ul li {
   display: inline-block;
-  padding: 0 5%;
+  padding: 0 2%;
   color: #333;
   -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -389,6 +389,7 @@ padding: 50px 70px;
         <li id="depositButton" class="txButton">Deposit</li>
         <li id="withdrawButton" class="txButton">Withdraw</li>
         <a href="#"><li>Awesomeness</li></a>
+        <a href="/register/"><li>Register as Maker</li></a>
       </ul>
     </div>
     <div class="search">
@@ -430,7 +431,7 @@ padding: 50px 70px;
 ">Register as a PH maker</h1>
     <form style="
 ">
-    <input class="address" value="" disabled="" style="
+    <input id="address" value="" disabled="" style="
     display: block;
     width: 75%;
     padding: 10px 15px;
@@ -440,7 +441,7 @@ padding: 50px 70px;
     font-size: 1.1rem;
     text-align: left;
 ">Your Product Hunt Username</p>
-    <input class="username" placeholder="MegaPHMaker231" style="
+    <input id="username" placeholder="MegaPHMaker231" style="
     display: block;
     width: 75%;
     padding: 10px 15px;
@@ -450,7 +451,7 @@ padding: 50px 70px;
     font-size: 1.1rem;
     text-align: left;
 ">Your Maker Profile Picture</p>
-    <input class="imageurl" placeholder="https://example.com/thisismyimage.png" style="
+    <input id="imageurl" placeholder="https://example.com/thisismyimage.png" style="
     display: block;
     width: 75%;
     padding: 10px 15px;
@@ -702,12 +703,13 @@ const getFunds = () => { PHBacon.getFundBalance(function(error, result) {
 // Set fund balance
 getFunds();
 
+console.log(web3.eth.accounts[0]);
+
 // Watching for depositTx event and updating page content
 PHBacon.Transaction().watch(function(error, result) {
   if(!error) {
     // WE NEED TO MODULARIZE THIS!
     getFunds();
-    collectTx();
   } else {
     console.log(error);
   }
@@ -747,6 +749,22 @@ $(document).mouseup(function(e) {
   if(!container.is(e.target) && container.has(e.target).length === 0 && container.is(":visible")) {
     $('.overlay').hide();
   }
+})
+
+// Allow users to register as a maker
+$('#registerButton').click(function() {
+  // Get values
+  let username = $('#username').val();
+  let imageurl = $('#imageurl').val();
+  let defaultAcc = web3.eth.accounts[0];
+  $('#address').val(defaultAcc);
+  PHBacon.becomeMaker(username, imageurl, {from: defaultAcc, value: web3.toWei('0.11')}, (error, result) => {
+    if (error) {
+
+    } else {
+      alert(`Registration succesful! We will verify your account soon so you can start withdrawing funds. Be sure to read out terms and conditions to understand the rate-limits that are active.`);
+    }
+  })
 })
 
 
