@@ -386,7 +386,7 @@ body {
 .overlay {
     position: absolute;
     width: 100%;
-    padding: 150px;
+    padding: 100px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -450,6 +450,17 @@ padding: 50px 70px;
 
 .window form .addressInput {
       padding: 10px 15px;
+    width: 100%;
+    font-size: 0.8rem;
+    letter-spacing: 0.9;
+    margin-bottom: 20px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.window form .messageInput {
+    padding: 10px 15px;
     width: 100%;
     font-size: 0.8rem;
     letter-spacing: 0.9;
@@ -523,7 +534,8 @@ padding: 50px 70px;
     </div>
     <div class="depositWindow window"><form>
         <p>Your address</p>
-        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>Amount in ETH</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>A message</p>
+        <input class="messageInput" id="messageValue" type="text" placeholder="Let us know why you are depositing some funds."><p>Amount in ETH</p>
         <input class="valueInput" id="depositValue" type="number" value="0.28" step="0.01"><p class="toUSD">30.6543 USD</p>
     
     </form><div class="goButton" id="depositSubmit">
@@ -532,7 +544,8 @@ padding: 50px 70px;
     </div>
     <div class="withdrawWindow window"><form>
         <p>Your address</p>
-        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>Amount in ETH</p>
+        <input class="addressInput" type="text" value="0x348hbfd84rhdf84r34hhd93jnna6GAKJDg7jwdhD" disabled><p>A message</p>
+        <input class="messageInput" id="messageValue" type="text" placeholder="Let us know why you are withdrawing these funds."><p>Amount in ETH</p>
         <input class="valueInput" id="withdrawValue" type="number" value="0.05" step="0.01"><p class="toUSD">30.6543 USD</p>
     
     </form><div class="goButton" id="withdrawSubmit">
@@ -941,34 +954,6 @@ const PHBaconContract = web3.eth.contract([
     "constant": false,
     "inputs": [
       {
-        "name": "_value",
-        "type": "uint256"
-      }
-    ],
-    "name": "withdraw",
-    "outputs": [],
-    "payable": false,
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
-        "name": "_username",
-        "type": "string"
-      }
-    ],
-    "name": "becomeMaker",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [
-      {
         "name": "_makerAddress",
         "type": "address"
       }
@@ -977,6 +962,20 @@ const PHBaconContract = web3.eth.contract([
     "outputs": [],
     "payable": false,
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "deposit",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -996,6 +995,10 @@ const PHBaconContract = web3.eth.contract([
       {
         "name": "",
         "type": "uint256"
+      },
+      {
+        "name": "",
+        "type": "string"
       },
       {
         "name": "",
@@ -1025,21 +1028,16 @@ const PHBaconContract = web3.eth.contract([
         "type": "string"
       },
       {
+        "name": "imgurl",
+        "type": "string"
+      },
+      {
         "name": "verified",
         "type": "bool"
       }
     ],
     "payable": false,
     "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "constant": false,
-    "inputs": [],
-    "name": "deposit",
-    "outputs": [],
-    "payable": true,
-    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -1054,6 +1052,42 @@ const PHBaconContract = web3.eth.contract([
     ],
     "payable": false,
     "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_value",
+        "type": "uint256"
+      },
+      {
+        "name": "_msg",
+        "type": "string"
+      }
+    ],
+    "name": "withdraw",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "_username",
+        "type": "string"
+      },
+      {
+        "name": "_imageurl",
+        "type": "string"
+      }
+    ],
+    "name": "becomeMaker",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -1079,6 +1113,11 @@ const PHBaconContract = web3.eth.contract([
         "indexed": true,
         "name": "_maker",
         "type": "address"
+      },
+      {
+        "indexed": false,
+        "name": "_msg",
+        "type": "string"
       }
     ],
     "name": "Transaction",
@@ -1087,7 +1126,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x6baC2c8A791D18a291C80a249333009415936B5F');
+const PHBacon = PHBaconContract.at('0xd1a0536AFdA125cD50Ff76d501D5764dE2F23Fc9');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -1148,16 +1187,19 @@ const collectTx = () => {
               valueCount += Number(result[result.length-(1+i)].args._value);
               // Set transaction box 
               let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+              let message = result[result.length-(1+i)].args._msg.substring(0,100) + '...';
               let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
               $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
               $(`#tx${i} .value p`).text(value);
+              $(`#tx${i} .makerInfo p`).text(message);
               $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/caret-arrow-up.png");
               PHBacon.getMaker(result[result.length-(1+i)].args._maker, function(error, resultM) {
                 if(resultM[0].length > 0) {
                   $(`#tx${i} .makerInfo h5`).text(resultM[0]);
-                  // $(`#tx${i} .box .image img`).attr("src",resultM[2]);
+                  $(`#tx${i} .box .image img`).attr("src",resultM[2]);
                 } else {
                   $(`#tx${i} .makerInfo h5`).text('Unknown');
+                  $(`#tx${i} .box .image img`).attr("src",'https://lejeunefoundation.org/wp-content/uploads/2017/06/male.jpg');
                 }
               })
             } // If _type is withdrawl (btes32)
@@ -1168,16 +1210,19 @@ const collectTx = () => {
               valueCount -= Number(result[result.length-(1+i)].args._value);
               // Set transaction box 
               let address = result[result.length-(1+i)].args._maker.substring(0,7) + '...';
+              let message = result[result.length-(1+i)].args._msg.substring(0,100) + '...';
               let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
               $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
               $(`#tx${i} .value p`).text(value);
+              $(`#tx${i} .makerInfo p`).text(message);
               $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/sort-down.png");
               PHBacon.getMaker(result[result.length-(1+i)].args._maker, function(error, resultM) {
                 if(resultM[0].length > 0) {
                   $(`#tx${i} .makerInfo h5`).text(resultM[0]);
-                  // $(`#tx${i} .box .image img`).attr("src",resultM[2]);
+                  $(`#tx${i} .box .image img`).attr("src",resultM[2]);
                 } else {
                   $(`#tx${i} .makerInfo h5`).text('Unknown');
+                  $(`#tx${i} .box .image img`).attr("src",'https://lejeunefoundation.org/wp-content/uploads/2017/06/male.jpg');
                 }
               })
             } else {
@@ -1307,9 +1352,10 @@ $(document).mouseup(function(e) {
 $('#depositSubmit').click(function() {
   // Set the default account
   let defaultAcc = web3.eth.accounts[0];
+  let message = $('.depositWindow #messageValue').val();
   let depValue = $('#depositValue').val();
   let valueWei = web3.toWei(depValue, "ether");
-  PHBacon.deposit({from: defaultAcc, value: valueWei}, function(error, result) {
+  PHBacon.deposit(message, {from: defaultAcc, value: valueWei}, function(error, result) {
     if (error) {
       console.log(error);
     } else {
@@ -1323,9 +1369,10 @@ $('#depositSubmit').click(function() {
 $('#withdrawSubmit').click(function() {
   // Set the default account
   let defaultAcc = web3.eth.accounts[0];
+  let message = $('.withdrawWindow #messageValue').val();
   let withValue = $('#withdrawValue').val();
   let valueWei = web3.toWei(withValue, "ether");
-  PHBacon.withdraw(valueWei, {from: defaultAcc}, function(error, result) {
+  PHBacon.withdraw(valueWei, message, {from: defaultAcc}, function(error, result) {
     if (error) {
       console.log(error);
     } else {

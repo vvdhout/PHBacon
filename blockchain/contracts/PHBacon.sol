@@ -44,7 +44,7 @@ contract PHBacon {
     
     
     // ============= EVENTS =============
-    event Transaction(bytes32 indexed _type, uint indexed _value, address indexed _maker);
+    event Transaction(bytes32 indexed _type, uint indexed _value, address indexed _maker, string _msg);
     
     
     // ============= MODIFIERS =============
@@ -76,7 +76,7 @@ contract PHBacon {
     } 
 
     // Get maker information using an address
-    function getMaker(address _address) public view returns(string memory, uint, string memory bool) {
+    function getMaker(address _address) public view returns(string memory, uint, string memory, bool) {
         Maker memory getM = addressToMaker[_address];
         return(getM.PHusername,getM.contributionBalance,getM.imgurl,getM.verified);
     }
@@ -87,31 +87,32 @@ contract PHBacon {
         addressToMaker[msg.sender].PHusername = _username;
         addressToMaker[msg.sender].imgurl = _imageurl;
         // Emit deposit event
-        emit Transaction("deposit", msg.value, msg.sender);
+        emit Transaction("deposit", msg.value, msg.sender, "Registered as a maker!");
     }
     
     // Allowing anybody to deposit funds, even non-verified makers
-    function deposit() public payable {
+    function deposit(string memory _msg) public payable {
         // Access Maker and increase contributionBalance
         Maker storage depM = addressToMaker[msg.sender];
         depM.contributionBalance += msg.value;
         // Emit deposit event
-        emit Transaction("deposit", msg.value, msg.sender);
+        emit Transaction("deposit", msg.value, msg.sender, _msg);
     }
     
     // Allowing the wirthdrawl of funds by verified makers, capped at 0.5ETH per week, and 
     // value dependent on contributionBalance with a max debt of 1 ETH per maker (assymptote)
-    function withdraw(uint _value) public notPaused() verified() {
+    function withdraw(uint _value, string memory _msg) public notPaused() verified() {
         // Set max withdrawl
         uint max = addressToMaker[msg.sender].contributionBalance / 2;
         require(_value <= max, "Sorry, you can only extract half of your contributionBalance in Wei.");
+        require(bytes(_msg).length > 0, "Make sure to add a message explaining your withdrawl.");
         // Access Maker and decrease contributionBalance
         Maker storage withM = addressToMaker[msg.sender];
         withM.contributionBalance -= _value;
         // Transfer funds
         msg.sender.transfer(_value);
         // Emit withdrawl event
-        emit Transaction("withdrawl", _value, msg.sender);
+        emit Transaction("withdrawl", _value, msg.sender, _msg);
     }
     
     // Set verified address
