@@ -189,6 +189,7 @@ body {
   border: 0.5px solid lightgrey;
   background-color: #fff;
   position: relative;
+  box-shadow: 5px 5px 25px 0 rgba(46,61,73,.2);
 }
 
 .left .graph .tinyBar {
@@ -954,6 +955,20 @@ const PHBaconContract = web3.eth.contract([
     "constant": false,
     "inputs": [
       {
+        "name": "_username",
+        "type": "string"
+      }
+    ],
+    "name": "becomeMaker",
+    "outputs": [],
+    "payable": true,
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
         "name": "_makerAddress",
         "type": "address"
       }
@@ -1072,7 +1087,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0x695ae1ECE9Fd2f1AA92F46E533835400260ceE32');
+const PHBacon = PHBaconContract.at('0x6baC2c8A791D18a291C80a249333009415936B5F');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -1137,6 +1152,14 @@ const collectTx = () => {
               $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
               $(`#tx${i} .value p`).text(value);
               $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/caret-arrow-up.png");
+              PHBacon.getMaker(result[result.length-(1+i)].args._maker, function(error, resultM) {
+                if(resultM[0].length > 0) {
+                  $(`#tx${i} .makerInfo h5`).text(resultM[0]);
+                  // $(`#tx${i} .box .image img`).attr("src",resultM[2]);
+                } else {
+                  $(`#tx${i} .makerInfo h5`).text('Unknown');
+                }
+              })
             } // If _type is withdrawl (btes32)
             else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
               // Increment depositCounter
@@ -1149,20 +1172,26 @@ const collectTx = () => {
               $(`#tx${i} .makerInfo span:nth-of-type(2)`).text(address);
               $(`#tx${i} .value p`).text(value);
               $(`#tx${i} .arrow img`).attr("src","https://courseroot.com/img/sort-down.png");
+              PHBacon.getMaker(result[result.length-(1+i)].args._maker, function(error, resultM) {
+                if(resultM[0].length > 0) {
+                  $(`#tx${i} .makerInfo h5`).text(resultM[0]);
+                  // $(`#tx${i} .box .image img`).attr("src",resultM[2]);
+                } else {
+                  $(`#tx${i} .makerInfo h5`).text('Unknown');
+                }
+              })
             } else {
               return "When collecting transaction events, we found events that did not match a deposit nor a withdrawl _type."
             }
           }
           $('#depositCount').text(depositCounter);
           $('#withdrawlCount').text(withdrawlCounter);
-          
           $('#valueUp').text(Math.round(((valueCount/1000000000000000000)*107)*100)/100);
           PHBacon.getFundBalance(function(error, resultB) {
             if (error) {
               return error;
             } else {
               let oldBalance = Number(resultB)-valueCount;
-              console.log(oldBalance);
               if((valueCount/(oldBalance))*100 == 'Infinity') {
                 $('#percUp').text(100);
               } else {
@@ -1189,10 +1218,23 @@ const collectTx = () => {
               }
             }
           } else {
+            for(let i=0; i < 100; i++) {
+                let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+                let height = 0;
+                if (value > 1) {
+                  height = 50
+                } else {
+                  height = value * 50;
+                }
+              if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#29EF7E","top": "unset", "bottom": "50%", "height": height+"%", "right": i + "%"});
+              } else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#F0397A","top": "50%","bottom": "unset", "height": height+"%", "right": i + "%"});
+              } else {
 
+              }
+            }
           }
-
-
       }
     })}
     })

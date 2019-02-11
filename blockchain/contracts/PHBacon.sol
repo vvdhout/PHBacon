@@ -30,6 +30,7 @@ contract PHBacon {
     struct Maker {
         uint contributionBalance;
         string PHusername;
+        string imgurl;
         bool verified;
     }
     
@@ -75,9 +76,18 @@ contract PHBacon {
     } 
 
     // Get maker information using an address
-    function getMaker(address _address) public view returns(string memory, uint, bool) {
+    function getMaker(address _address) public view returns(string memory, uint, string memory bool) {
         Maker memory getM = addressToMaker[_address];
-        return(getM.PHusername,getM.contributionBalance,getM.verified);
+        return(getM.PHusername,getM.contributionBalance,getM.imgurl,getM.verified);
+    }
+
+    // Become a maker and request verification
+    function becomeMaker(string memory _username, string memory _imageurl) public payable {
+        require(msg.value > 0.1 ether, "In order to become a maker you need to send over at least 0.10 ETH with the function call.");
+        addressToMaker[msg.sender].PHusername = _username;
+        addressToMaker[msg.sender].imgurl = _imageurl;
+        // Emit deposit event
+        emit Transaction("deposit", msg.value, msg.sender);
     }
     
     // Allowing anybody to deposit funds, even non-verified makers
