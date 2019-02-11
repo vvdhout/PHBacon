@@ -184,6 +184,13 @@ body {
   height: 230px;
   border: 0.5px solid lightgrey;
   background-color: #fff;
+  position: relative;
+}
+
+.left .graph .tinyBar {
+  display: inline-block;
+  width: 1%;
+  position: absolute;
 }
 
 /* ========== Center segment: Vault ========== 
@@ -555,7 +562,7 @@ padding: 50px 70px;
       <div class="dataBox">
         <div class="row">
           <div class="bit">
-            <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>6%
+            <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div><p id="percUp">6</p>%
           </div>
           <div class="bit" style="font-size: 1.6rem;">
             <div class="arrow"><img src="https://courseroot.com/img/caret-arrow-up.png"></div>$<p id="valueUp">360</p>
@@ -570,7 +577,44 @@ padding: 50px 70px;
           </div>
         </div>
       </div>
-      <div class="graph">
+      <div class="graph"><hr style="
+    position: absolute;
+    bottom: 50%;
+    border: 0.5px solid lightgrey;
+    width: 100%;
+">
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
+      <div class="tinyBar">
+      </div>
       </div>
     </div>
 
@@ -845,7 +889,7 @@ const PHBaconContract = web3.eth.contract([
 ]);
 
 // Connect to the smart contract by providing its ethereum address
-const PHBacon = PHBaconContract.at('0xB4b16556cE2965E5DdeA22DeA095B726d67f07b0');
+const PHBacon = PHBaconContract.at('0xc5A391f2CE41356FfB657BDe6F2437f71869D6Cb');
 
 /* ============================================================================================================================
 =========== Starting actual functionality =====================================================================================
@@ -928,7 +972,44 @@ const collectTx = () => {
           }
           $('#depositCount').text(depositCounter);
           $('#withdrawlCount').text(withdrawlCounter);
+          
           $('#valueUp').text(Math.round(((valueCount/1000000000000000000)*107)*100)/100);
+          PHBacon.getFundBalance(function(error, resultB) {
+            if (error) {
+              return error;
+            } else {
+              let oldBalance = Number(resultB)-valueCount;
+              console.log(oldBalance);
+              if((valueCount/(oldBalance))*100 == 'Infinity') {
+                $('#percUp').text(100);
+              } else {
+                $('#percUp').text((valueCount/(oldBalance))*100);
+              }
+            }
+          });
+
+          if (result.length < 101) {
+            for(let i=0; i < result.length; i++) {
+                let value = Math.round((result[result.length-(1+i)].args._value/1000000000000000000)*1000)/1000;
+                let height = 0;
+                if (value > 1) {
+                  height = 50
+                } else {
+                  height = value * 50;
+                }
+              if (result[result.length-(1+i)].args._type == '0x6465706f73697400000000000000000000000000000000000000000000000000') {
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#29EF7E","bottom": "50%", "height": height+"%", "right": i + "%"});
+              } else if (result[result.length-(1+i)].args._type == '0x77697468647261776c0000000000000000000000000000000000000000000000') {
+                $(`.tinyBar:nth-of-type(${i+1})`).css({"background-color": "#F0397A","top": "50%", "height": height+"%", "right": i + "%"});
+              } else {
+
+              }
+            }
+          } else {
+
+          }
+
+
       }
     })}
     })
